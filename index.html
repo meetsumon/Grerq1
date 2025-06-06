@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRE Practice Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* Login Page Styles */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #4a6cf7, #8e44ad);
+            padding: 20px;
+        }
+        
+        .login-form {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+        
+        .login-title {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        
+        .login-logo {
+            font-size: 2.5rem;
+            color: #4a6cf7;
+            margin-bottom: 20px;
+        }
+        
+        .login-input {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #e0e6ed;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .login-input:focus {
+            border-color: #4a6cf7;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.2);
+        }
+        
+        .login-btn {
+            background-color: #4a6cf7;
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        
+        .login-btn:hover {
+            background-color: #3a5ce5;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            margin-top: 10px;
+            min-height: 24px;
+            font-weight: 500;
+        }
+        
+        .user-id-note {
+            color: #7f8c8d;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        /* Test Container - Initially Hidden */
+        .test-container {
+            display: none;
+        }
+        
+        /* Existing Styles for the Test */
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 2px solid #e0e6ed;
+            margin-bottom: 25px;
+            background-color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #4a6cf7;
+        }
+        
+        .timer-container {
+            background-color: #f0f4ff;
+            border-radius: 30px;
+            padding: 8px 20px;
+            font-weight: 600;
+            color: #4a6cf7;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .timer-icon {
+            font-size: 1.2rem;
+        }
+        
+        .progress-container {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #5c6b80;
+            font-weight: 500;
+        }
+        
+        .section-title {
+            background-color: #4a6cf7;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin: 25px 0 15px;
+            font-size: 1.1rem;
+        }
+        
+        .question-container {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+        
+        .passage {
+            background-color: #f9faff;
+            border-left: 4px solid #4a6cf7;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            font-weight: 500;
+            color: #2d3748;
+            line-height: 1.7;
+        }
+        
+        .options-grid {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .single-column {
+            grid-template-columns: 1fr;
+        }
+        
+        .two-columns {
+            grid-template-columns: 1fr 1fr;
+        }
+        
+        .three-columns {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px 15px;
+            background-color: #f8f9fc;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        
+        .option-item:hover {
+            background-color: #edf2ff;
+            border-color: #c5d3ff;
+        }
+        
+        .option-item.selected {
+            background-color: #e1e9ff;
+            border-color: #4a6cf7;
+        }
+        
+        .option-letter {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background-color: #e0e6ed;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            margin-right: 15px;
+            font-weight: 600;
+            color: #5c6b80;
+            flex-shrink: 0;
+        }
+        
+        .selected .option-letter {
+            background-color: #4a6cf7;
+            color: white;
+        }
+        
+        .blank-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .blank-column {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .blank-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #4a6cf7;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+        
+        .btn-next {
+            background-color: #4a6cf7;
+            color: white;
+        }
+        
+        .btn-next:hover {
+            background-color: #3a5ce5;
+        }
+        
+        .btn-next:disabled {
+            background-color: #c5d3ff;
+            cursor: not-allowed;
+        }
+        
+        .btn-prev {
+            background-color: #e0e6ed;
+            color: #5c6b80;
+        }
+        
+        .btn-prev:hover {
+            background-color: #d1d9e6;
+        }
+        
+        .summary-container {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .summary-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #4a6cf7;
+            font-size: 1.5rem;
+        }
+        
+        .summary-section {
+            margin-bottom: 35px;
+        }
+        
+        .section-header {
+            background-color: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #4a6cf7;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .summary-item {
+            padding: 15px;
+            border-bottom: 1px solid #edf2f7;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .question-summary {
+            flex: 1;
+            min-width: 300px;
+            margin-bottom: 10px;
+        }
+        
+        .answer-summary {
+            font-weight: 600;
+            color: #4a6cf7;
+            min-width: 150px;
+        }
+        
+        .completion-message {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: #f0faff;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        
+        .completion-title {
+            color: #4a6cf7;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .completion-text {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            color: #4a5568;
+        }
+        
+        .highlight {
+            background-color: #fffacd;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        
+        @media (max-width: 768px) {
+            .two-columns, .three-columns {
+                grid-template-columns: 1fr;
+            }
+            
+            .blank-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .login-form {
+                padding: 30px 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            .question-container {
+                padding: 20px 15px;
+            }
+            
+            .section-title {
+                font-size: 1rem;
+            }
+            
+            .summary-container {
+                padding: 20px 15px;
+            }
+            
+            .login-title {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="login-page" class="login-container">
+        <div class="login-form">
+            <div class="login-logo">GRE Practice</div>
+            <h1 class="login-title">Practice Test Login</h1>
+            <input type="text" id="user-id" class="login-input" placeholder="Enter your User ID" maxlength="7">
+            <div id="error-message" class="error-message"></div>
+            <button id="login-btn" class="login-btn">Start Test</button>
+            
+            <div class="user-id-note">
+               
+            </div>
+        </div>
+    </div>
+    
+    <!-- Test Container (Initially Hidden) -->
+    <div id="test-container" class="test-container">
+        <header>
+            <div class="logo">GRE Practice</div>
+            <div class="timer-container">
+                <span class="timer-icon">⏱</span>
+                <span id="timer">00:00:00</span>
+            </div>
+        </header>
+        
+        <div id="progress-container" class="progress-container">
+            Section: <span id="section-indicator">2</span> | 
+            Question: <span id="current-question">1</span> of <span id="total-questions">12</span>
+        </div>
+        
+        <div id="content">
+            <!-- Content will be dynamically generated -->
+        </div>
+    </div>
+
+    <script>
+        // Valid user IDs
+        const validUserIds = [
+            '9275038', '1037642', '5803921', '4362097', '8941270', 
+            '2157834', '6729043', '3901826', '7584930', '6412075',
+            '8936401', '1207593', '7021846', '5497208', '3081752',
+            '6741239', '9510384', '4162975', '2807346', '7382091'
+        ];
+        
+        // Login functionality
+        document.getElementById('login-btn').addEventListener('click', handleLogin);
+        document.getElementById('user-id').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                handleLogin();
+            }
+        });
+        
+        function handleLogin() {
+            const userId = document.getElementById('user-id').value.trim();
+            const errorElement = document.getElementById('error-message');
+            
+            if (!userId) {
+                errorElement.textContent = 'Please enter your User ID';
+                return;
+            }
+            
+            if (!validUserIds.includes(userId)) {
+                errorElement.textContent = 'Invalid User ID. Please try again.';
+                return;
+            }
+            
+            // Valid login - show test container
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('test-container').style.display = 'block';
+            
+            // Initialize the test
+            initApp();
+        }
+        
+        // Question data structure
+        const questions = {
+            section2: [
+                // Page 1
+                {
+                    type: "single",
+                    question: "One thing both authors have in common is a striking amount of ______: they claim to know how massive institutions, some of them richly endowed, all of them central to American society and culture, should be reshaped.",
+                    options: ["hubris", "propriety", "bias", "prescience", "indolence"],
+                    passage: ""
+                },
+                // Page 2
+                {
+                    type: "double",
+                    question: "No one (i) ______ that building a ship powered by black holes or dark matter would be a formidable task. Yet remarkably there seems to be nothing in our present understanding of physics that (ii) ______ our doing so.",
+                    blanks: [
+                        { label: "Blank (i)", options: ["believes", "admits", "disputes"] },
+                        { label: "Blank (ii)", options: ["anticipates", "necessitates", "precludes"] }
+                    ],
+                    passage: ""
+                },
+                // Page 3
+                {
+                    type: "triple",
+                    question: "Letters present an awkward stumbling block to those who take a high line about literature as a custodian of moral values. The letters of accomplished poets and novelists are—as often as not—about drinking and infidelity, about sponging and wasting time. Consequently, one’s (i) ______ the writer as (ii) ______ can often come in for a rude shock on contemplation of the writer’s correspondence: the soul that composed the poems and the self that wrote the letters can seem (iii) ______.",
+                    blanks: [
+                        { label: "Blank (i)", options: ["doubts about", "familiarity with", "reverence for"] },
+                        { label: "Blank (ii)", options: ["feckless", "exemplary", "idiosyncratic"] },
+                        { label: "Blank (iii)", options: ["irreconcilable", "inspirational", "exotic"] }
+                    ],
+                    passage: ""
+                },
+                // Page 4
+                {
+                    type: "multiple",
+                    question: "Which of the following statements about how pearly mussels feed can be inferred from the passage?",
+                    options: [
+                        "Juveniles of some pearly mussel species are unable to suspension feed.",
+                        "If the feeding ability of pearly mussels does not change during their life cycle, then mature pearly mussels probably have the ability to pedal feed.",
+                        "Pearly mussels are unlikely to engage in suspension feeding when the sediment contains abundant edible material."
+                    ],
+                    passage: "Recently researchers have questioned the portrayal of pearly mussels, which are freshwater bivalves, as feeding exclusively on particles suspended in water (suspension feeding). Many ocean-dwelling bivalves siphon food from the sediment surface (deposit feeding) or use their foot to sweep edible material from the sediment (pedal feeding). It is known that juvenile pearly mussels can pedal feed, although researchers still do not know how the ability to pedal feed varies across species, over the lifetime of a single mussel, or with the relative availability of food in the sediment.",
+                    multiple: true
+                },
+                // Page 5
+                {
+                    type: "multiple",
+                    question: "According to the passage, which of the following bivalve feeding behavior?",
+                    options: [
+                        "Many ocean-dwelling bivalves are exclusively suspension feeders.",
+                        "Many ocean-dwelling bivalves get at least a portion of their nutrition from sediment.",
+                        "Many ocean-dwelling bivalves employ different feeding mechanisms at different stages of their life.",
+                        "Mature freshwater bivalves are known to both suspension feed and deposit feed.",
+                        "Mature freshwater bivalves are known to get a portion of their nutrition by pedal feeding."
+                    ],
+                    passage: "Recently researchers have questioned the portrayal of pearly mussels, which are freshwater bivalves, as feeding exclusively on particles suspended in water (suspension feeding). Many ocean-dwelling bivalves siphon food from the sediment surface (deposit feeding) or use their foot to sweep edible material from the sediment (pedal feeding). It is known that juvenile pearly mussels can pedal feed, although researchers still do not know how the ability to pedal feed varies across species, over the lifetime of a single mussel, or with the relative availability of food in the sediment.",
+                    multiple: false
+                },
+                // Page 6
+                {
+                    type: "synonyms",
+                    question: "When discussing the United States Army’s 1876 campaign against the Sioux, Powers is occasionally ______ context: he describes General Crook’s march to the Battle of the Rosebud but neglects to mention how it fit into the army’s overall strategy.",
+                    options: ["misinformed about", "obsessed with", "frugal with", "preoccupied with", "stinting with", "unscrupulous about"]
+                },
+                // Page 7
+                {
+                    type: "synonyms",
+                    question: "Those familiar with the insular conditions that once prevailed in Russia may be surprised by the ______ of eighteenth-century Russian composer Natalia Kurakina, who translated novels from French into Italian and composed songs in both languages.",
+                    options: ["versatility", "worldliness", "dedication", "ingenuity", "cosmopolitanism", "industriousness"]
+                },
+                // Page 8
+                {
+                    type: "synonyms",
+                    question: "Analysis of the structural features that were thought to ______ kinship between the two species prompted an investigation that dispelled that presumption and revealed that the two do share a family history.",
+                    options: ["signify", "underrate", "point to", "preclude", "rule out", "exaggerate"]
+                },
+                // Page 9
+                {
+                    type: "synonyms",
+                    question: "Responsibility for the nation’s decline rests squarely with a people who take for granted their claims to preeminence but do not ______ interest in or commitment to actually maintaining it.",
+                    options: ["foresee", "rebuff", "evince", "reject", "predict", "betray"]
+                },
+                // Page 10
+                {
+                    type: "multiple",
+                    question: "The \"pattern\" mentioned in the passage refers to",
+                    options: [
+                        "the value placed by people of wealth and gentility on miniature portraits of family members",
+                        "the increasing frequency with which African American families chose to commission portraits",
+                        "an ascent in social status among antebellum African Americans who came to live in New York",
+                        "the propensity of African Americans who commissioned portraits to favor paintings that called attention to their status",
+                        "a tendency of wealthy New York families to patronize artists by commissioning paintings"
+                    ],
+                    passage: "In 1825, emancipated slave Pierre Toussaint, who had become a successful New York hairdresser, commissioned miniature portraits of himself, his wife, Juliette, and his adopted niece. It was an unconventional choice. Judging by the extant evidence, those few antebellum African Americans who commissioned portraits chose bust-sized oil paintings, paintings that announced their status—their respectability, their prosperity, and their personhood—to the public at large. And, given the implicit publicity of these paintings, it is not surprising that so many represent men: African-descended ministers, activists, barbers, and men of affairs, men who were assuming positions of leadership within the North’s free black communities. It is not clear why Toussaint, a public-minded man who was deeply involved in a variety of philanthropic efforts, diverged from this pattern by choosing to represent himself, much less his entire family, in a genre so closely associated with domestic intimacy.",
+                    multiple: false
+                },
+                // Page 11
+                {
+                    type: "multiple",
+                    question: "The author mentions Toussaint's efforts \"to recover family members who had been lost during the Haitian Revolution\" primarily to",
+                    options: [
+                        "contrast Toussaint's experience with that of other successful African Americans in New York",
+                        "help explain why Toussaint became deeply involved in various philanthropic efforts",
+                        "acknowledge the difficulties Toussaint faced following his emancipation from slavery",
+                        "rule out one explanation for Toussaint's preference for miniature over large family portraits",
+                        "support a possible explanation for Toussaint's commissioning of a particular genre of painting"
+                    ],
+                    passage: "In 1825, emancipated slave Pierre Toussaint, who had become a successful New York hairdresser, commissioned miniature portraits of himself, his wife, Juliette, and his adopted niece. It was an unconventional choice. Judging by the extant evidence, those few antebellum African Americans who commissioned portraits chose bust-sized oil paintings, paintings that announced their status—their respectability, their prosperity, and their personhood—to the public at large. And, given the implicit publicity of these paintings, it is not surprising that so many represent men: African-descended ministers, activists, barbers, and men of affairs, men who were assuming positions of leadership within the North's free black communities. It is not clear why Toussaint, a public-minded man who was deeply involved in a variety of philanthropic efforts, diverged from this pattern by choosing to represent himself, much less his entire family, in a genre so closely associated with domestic intimacy.",
+                    multiple: false
+                },
+                // Page 12
+                {
+                    type: "multiple",
+                    question: "The author mentions \"bust-sized oil paintings\" primarily in order to",
+                    options: [
+                        "counter a particular assumption",
+                        "cite a noteworthy example",
+                        "elaborate on an assertion",
+                        "account for a historical change",
+                        "note an exception to a generalization"
+                    ],
+                    passage: "In 1825, emancipated slave Pierre Toussaint, who had become a successful New York hairdresser, commissioned miniature portraits of himself, his wife, Juliette, and his adopted niece. It was an unconventional choice. Judging by the extant evidence, those few antebellum African Americans who commissioned portraits chose bust-sized oil paintings, paintings that announced their status—their respectability, their prosperity, and their personhood—to the public at large. And, given the implicit publicity of these paintings, it is not surprising that so many represent men: African-descended ministers, activists, barbers, and men of affairs, men who were assuming positions of leadership within the North's free black communities. It is not clear why Toussaint, a public-minded man who was deeply involved in a variety of philanthropic efforts, diverged from this pattern by choosing to represent himself, much less his entire family, in a genre so closely associated with domestic intimacy.",
+                    multiple: false
+                }
+            ],
+            section4: [
+                // Page 25
+                {
+                    type: "single",
+                    question: "Because we participate in the dynamics of ecosystems as we restore them, restoration practice is in essence antithetical to the idea of ______ wilderness.",
+                    options: ["improved", "protected", "remote", "pristine", "degraded"],
+                    passage: ""
+                },
+                // Page 26
+                {
+                    type: "double",
+                    question: "For millennia, remembering was hard and costly, and people had to choose deliberately what should be remembered, allowing most things to be forgotten. The digital age has brought about an (i)______ of the balance of remembering and forgetting. Committing information to digital memory has become (ii)______.",
+                    blanks: [
+                        { label: "Blank (i)", options: ["attenuation", "inversion", "extension"] },
+                        { label: "Blank (ii)", options: ["the default", "a burden", "an excuse"] }
+                    ],
+                    passage: ""
+                },
+                // Page 27
+                {
+                    type: "triple",
+                    question: "Those who blame the inadequacies of science education for students' lack of reasoning skills perpetuate the unproductive notion of science as (i)______, unique in its capacity to inoculate us against superstition and ignorance. Certainly a good science education can (ii)______ habits of mind, but the (iii)______ effect of education in nonscientific, humanistic subjects such as literature and history should not be underrated.",
+                    blanks: [
+                        { label: "Blank (i)", options: ["vocational", "empirical", "salvational"] },
+                        { label: "Blank (ii)", options: ["counter uncritical", "discourage rigorous", "temper creative"] },
+                        { label: "Blank (iii)", options: ["unforeseen", "salutary", "pedestrian"] }
+                    ],
+                    passage: ""
+                },
+                // Page 28
+                {
+                    type: "triple",
+                    question: "When reviewing a book that advertises lying as its subject, the critic has a duty to screen the title for possible (i)______, and it is therefore necessary to report that The Concise Book of Lying is not concise. If the book were making a case for deception, the mismatch might not matter: a (ii)______ title might suit a book designed to disabuse us of our respect for (iii)______. But the book is not an apology for lying; it is on the side of truth.",
+                    blanks: [
+                        { label: "Blank (i)", options: ["ambiguity", "mendacity", "partiality"] },
+                        { label: "Blank (ii)", options: ["misleading", "dependable", "verbose"] },
+                        { label: "Blank (iii)", options: ["brevity", "pedantry", "veracity"] }
+                    ],
+                    passage: ""
+                },
+                // Page 29
+                {
+                    type: "multiple",
+                    question: "It can be inferred that the author of the passage mentions protoplanetary disks because",
+                    options: [
+                        "the computer modeling techniques used to study them were later applied to Saturn's rings",
+                        "conclusions about them might reasonably be applied to Saturn's rings",
+                        "the accepted understanding of them is challenged by observations of Saturn's rings",
+                        "the material of which Saturn's rings are composed must at one time have been in a protoplanetary disk around the Sun",
+                        "observations of Saturn's rings may serve as a substitute for observations of protoplanetary disks"
+                    ],
+                    passage: "Simulations indicate, and observations confirm, that the particles constituting Saturn's rings are giving up angular momentum to moons of the planet. The simulations predict that over just a few hundred million years, the related energy transfer will cause the rings' collapse. An analogous process occurs around young stars in the disks of matter from which planets emerge, and these protoplanetary disks do vanish that quickly, computer models show. Yet if Saturn's rings are so short-lived, a large comet or moon—the rings' presumed source—must have broken apart in Saturn's vicinity within the past several hundred million years. That is quite unlikely. It would have been much more probable in the young solar system—4 billion years ago or more.",
+                    multiple: false
+                },
+                // Page 30
+                {
+                    type: "multiple",
+                    question: "The passage suggests which of the following about the \"energy transfer\"?",
+                    options: [
+                        "Its effects are obscured by the angular momentum of Saturn's moons.",
+                        "It is part of a process that also imparts angular momentum to at least some of Saturn's moons.",
+                        "It proceeds more slowly than does an analogous energy transfer that occurs in the vicinity of young stars."
+                    ],
+                    passage: "Simulations indicate, and observations confirm, that the particles constituting Saturn's rings are giving up angular momentum to moons of the planet. The simulations predict that over just a few hundred million years, the related energy transfer will cause the rings' collapse. An analogous process occurs around young stars in the disks of matter from which planets emerge, and these protoplanetary disks do vanish that quickly, computer models show. Yet if Saturn's rings are so short-lived, a large comet or moon—the rings' presumed source—must have broken apart in Saturn's vicinity within the past several hundred million years. That is quite unlikely. It would have been much more probable in the young solar system—4 billion years ago or more.",
+                    multiple: true
+                },
+                // Page 31
+                {
+                    type: "multiple",
+                    question: "According to the passage, village sketches written by women in the United States in the 1830s and 1840s typically reflected",
+                    options: [
+                        "the negotiations that characterized trade relationships between villages",
+                        "the fact that these women did not often travel very far beyond their own village",
+                        "the plurality of experiences and ideas that existed among the residents of a village"
+                    ],
+                    passage: "Buell's study of village sketches (a type of fiction popular in the United States in the 1830s and 1840s) provides a valuable summary of sketches that portray the community as homogeneous and fixed, but it ignores those by women writers, which typically depicted the diversity that increasingly characterized actual village communities at that time. These women's geographical mobility was restricted (although women writers of the time were not uniformly circumscribed in this way), and their subject matter reflected this fact. Yet their texts were enriched by what Gilligan, writing in a different context, has called the ability to attend to voices other than one's own. To varying degrees, the women's sketches portray differences among community members: all stress differences among men and among women (particularly the latter) as well as differences between the sexes, and some also depict cultural diversity. These writers represent community as dynamic, as something that must be negotiated and renegotiated because of its members' divergent histories, positions, expectations, and beliefs.",
+                    multiple: true
+                },
+                // Page 32
+                {
+                    type: "select-sentence",
+                    question: "Select the sentence in the passage that contrasts men and women depicted life in village communities.",
+                    passage: "Buell's study of village sketches (a type of fiction popular in the United States in the 1830s and 1840s) provides a valuable summary of sketches that portray the community as homogeneous and fixed, but it ignores those by women writers, which typically depicted the diversity that increasingly characterized actual village communities at that time. These women's geographical mobility was restricted (although women writers of the time were not uniformly circumscribed in this way), and their subject matter reflected this fact. Yet their texts were enriched by what Gilligan, writing in a different context, has called the ability to attend to voices other than one's own. To varying degrees, the women's sketches portray differences among community members: all stress differences among men and among women (particularly the latter) as well as differences between the sexes, and some also depict cultural diversity. These writers represent community as dynamic, as something that must be negotiated and renegotiated because of its members' divergent histories, positions, expectations, and beliefs."
+                },
+                // Page 33
+                {
+                    type: "multiple",
+                    question: "The passage indicates that when Gilligan spoke of \"the ability to attend to voices other than one's own,\" she",
+                    options: [
+                        "did not consider that ability to be a desirable psychological characteristic",
+                        "did not believe that individuals differ greatly with respect to that ability",
+                        "was implying that that ability enhances a sense of belonging in communities",
+                        "was assuming that good writers are able to depict diverse characters",
+                        "was not discussing the women who wrote village sketches"
+                    ],
+                    passage: "Buell's study of village sketches (a type of fiction popular in the United States in the 1830s and 1840s) provides a valuable summary of sketches that portray the community as homogeneous and fixed, but it ignores those by women writers, which typically depicted the diversity that increasingly characterized actual village communities at that time. These women's geographical mobility was restricted (although women writers of the time were not uniformly circumscribed in this way), and their subject matter reflected this fact. Yet their texts were enriched by what Gilligan, writing in a different context, has called the ability to attend to voices other than one's own. To varying degrees, the women's sketches portray differences among community members: all stress differences among men and among women (particularly the latter) as well as differences between the sexes, and some also depict cultural diversity. These writers represent community as dynamic, as something that must be negotiated and renegotiated because of its members' divergent histories, positions, expectations, and beliefs.",
+                    multiple: false
+                },
+                // Page 34
+                {
+                    type: "synonyms",
+                    question: "Despite her rather ______ choices, Moreland was neither a rebellious spirit nor someone who saw herself as anything out of the ordinary.",
+                    options: ["unconventional", "impractical", "quirky", "flamboyant", "successful", "lucrative"]
+                },
+                // Page 35
+                {
+                    type: "synonyms",
+                    question: "Nicolaus Copernicus' On the Revolutions of the Celestial Spheres, published in 1543, laid out the theory that Earth and the other planets go around the Sun, ______ a long-held belief that Earth was the center of the universe.",
+                    options: ["contravening", "sanctioning", "ratifying", "consolidating", "gainsaying", "prefiguring"]
+                },
+                // Page 36
+                {
+                    type: "synonyms",
+                    question: "It is normal for artists who achieve great acclaim during their lifetimes to be considered ______ shortly after their deaths, only to have their reputations restored by subsequent generations.",
+                    options: ["sacrosanct", "outmoded", "overrated", "canonical", "unfashionable", "emblematic"]
+                },
+                // Page 37
+                {
+                    type: "multiple",
+                    question: "Which of the following, if true, most seriously weakens the argument?",
+                    options: [
+                        "People in the early stages of Alzheimer's disease often neglect maintaining a healthy diet.",
+                        "Most of those who develop Alzheimer's disease do not exhibit any symptoms of the disease before the age of 60.",
+                        "Many people who are in the early stages of Alzheimer's disease are not aware that they have it.",
+                        "Many young people have diets that are deficient in vitamin B₁₂.",
+                        "Deficiencies in B vitamins other than B₁₂ are not as strongly correlated with Alzheimer's disease as is vitamin B₁₂ deficiency."
+                    ],
+                    passage: "When blood samples from elderly people were tested for levels of vitamin B₁₂, it was found that those whose blood was deficient in B₁₂ were four times more likely than were other elderly people to have symptoms characteristic of the early stages of Alzheimer's disease, such as increasing forgetfulness. Clearly, therefore, either a diet low in B₁₂ disposes a person to Alzheimer's disease, or Alzheimer's disease affects the absorption of dietary B₁₂ into the blood.",
+                    multiple: false
+                },
+                // Page 38
+                {
+                    type: "multiple",
+                    question: "The primary purpose of the passage is to",
+                    options: [
+                        "examine the origins of an influential theory",
+                        "account for the dearth of research on a particular subject",
+                        "contrast two scholarly approaches to the study of a phenomenon",
+                        "explain how a certain distinction came to dominate an academic discipline",
+                        "question the aptness of a particular schema for understanding a development"
+                    ],
+                    passage: "A longstanding scholarly neglect of the subject of cooking is partly attributable to the antiquated \"separate spheres\" schema that differentiated a private female sphere, which included food preparation and consumption, from a public male sphere, which included food production. While this concept never reflected most women's daily realities—women are major food producers worldwide—the ideological polarization certainly influenced the development of academia: it effectively segregated women into working in low-status \"domestic\" disciplines such as dietetics and home economics, while the male-dominated realms of industrial agriculture, food technology, mass retailing, and corporate management enjoyed public respect and academic prestige. This institutionalized bias delayed serious attention to cooking even after feminists in the 1960s obliterated the notion of separate spheres and more women entered all areas of academia.",
+                    multiple: false
+                },
+                // Page 39
+                {
+                    type: "multiple",
+                    question: "The author mentions \"feminists\" primarily in order to",
+                    options: [
+                        "elaborate on a particular rift in scholarly circles",
+                        "answer a particular challenge to the \"separate spheres\" schema",
+                        "cite a cultural development that influenced the study of food",
+                        "help account for an ideological shift within academia",
+                        "underscore the tenacity of an attitude that constrained scholarly inquiry"
+                    ],
+                    passage: "A longstanding scholarly neglect of the subject of cooking is partly attributable to the antiquated \"separate spheres\" schema that differentiated a private female sphere, which included food preparation and consumption, from a public male sphere, which included food production. While this concept never reflected most women's daily realities—women are major food producers worldwide—the ideological polarization certainly influenced the development of academia: it effectively segregated women into working in low-status \"domestic\" disciplines such as dietetics and home economics, while the male-dominated realms of industrial agriculture, food technology, mass retailing, and corporate management enjoyed public respect and academic prestige. This institutionalized bias delayed serious attention to cooking even after feminists in the 1960s obliterated the notion of separate spheres and more women entered all areas of academia.",
+                    multiple: false
+                }
+            ]
+        };
+
+        // App state
+        const state = {
+            currentSection: 'section2',
+            currentQuestionIndex: 0,
+            answers: {
+                section2: Array(questions.section2.length).fill(null),
+                section4: Array(questions.section4.length).fill(null)
+            },
+            sectionTimes: {
+                section2: 0,
+                section4: 0
+            },
+            timerInterval: null,
+            sectionStartTime: null,
+            selectedSentence: null
+        };
+
+        // Initialize app
+        function initApp() {
+            startTimer();
+            renderQuestion();
+        }
+
+        // Timer functions
+        function startTimer() {
+            state.sectionStartTime = Date.now();
+            state.timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            const elapsedTime = Math.floor((Date.now() - state.sectionStartTime) / 1000);
+            state.sectionTimes[state.currentSection] = elapsedTime;
+            
+            const hours = Math.floor(elapsedTime / 3600);
+            const minutes = Math.floor((elapsedTime % 3600) / 60);
+            const seconds = elapsedTime % 60;
+            
+            document.getElementById('timer').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function stopTimer() {
+            clearInterval(state.timerInterval);
+        }
+
+        // Render current question
+        function renderQuestion() {
+            const section = state.currentSection;
+            const index = state.currentQuestionIndex;
+            const question = questions[section][index];
+            const contentEl = document.getElementById('content');
+            
+            // Update progress indicator
+            document.getElementById('section-indicator').textContent = 
+                section === 'section2' ? '2' : '4';
+            document.getElementById('current-question').textContent = index + 1;
+            document.getElementById('total-questions').textContent = 
+                section === 'section2' ? questions.section2.length : questions.section4.length;
+            
+            let html = `
+                <div class="section-title">Section ${section === 'section2' ? '2' : '4'}</div>
+                <div class="question-container">
+            `;
+            
+            // Add passage if exists
+            if (question.passage) {
+                if (question.type === 'select-sentence') {
+                    // For sentence selection question
+                    html += `<div class="passage" id="passage-text">`;
+                    const sentences = question.passage.split('. ');
+                    sentences.forEach((sentence, i) => {
+                        if (sentence.trim()) {
+                            const isSelected = state.selectedSentence === i;
+                            html += `<div class="sentence ${isSelected ? 'selected' : ''}" data-index="${i}">${sentence.trim()}.</div>`;
+                        }
+                    });
+                    html += `</div>`;
+                } else {
+                    html += `<div class="passage">${question.passage}</div>`;
+                }
+            }
+            
+            html += `<div class="question-text">${question.question}</div>`;
+            
+            // Render options based on question type
+            if (question.type === 'single') {
+                html += `<div class="options-grid single-column">`;
+                question.options.forEach((option, i) => {
+                    const isSelected = state.answers[section][index] === i;
+                    const letter = String.fromCharCode(65 + i);
+                    html += `
+                        <div class="option-item ${isSelected ? 'selected' : ''}" data-option="${i}">
+                            <div class="option-letter">${letter}</div>
+                            <div class="option-text">${option}</div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            }
+            else if (question.type === 'double' || question.type === 'triple') {
+                html += `<div class="blank-container">`;
+                question.blanks.forEach((blank, blankIndex) => {
+                    html += `<div class="blank-column">`;
+                    html += `<div class="blank-title">${blank.label}</div>`;
+                    html += `<div class="options-grid single-column">`;
+                    
+                    blank.options.forEach((option, i) => {
+                        const isSelected = state.answers[section][index] && 
+                                          state.answers[section][index][blankIndex] === i;
+                        const letter = String.fromCharCode(65 + i);
+                        html += `
+                            <div class="option-item ${isSelected ? 'selected' : ''}" 
+                                 data-blank="${blankIndex}" data-option="${i}">
+                                <div class="option-letter">${letter}</div>
+                                <div class="option-text">${option}</div>
+                            </div>
+                        `;
+                    });
+                    
+                    html += `</div></div>`;
+                });
+                html += `</div>`;
+            }
+            else if (question.type === 'multiple') {
+                html += `<div class="options-grid single-column">`;
+                question.options.forEach((option, i) => {
+                    let isSelected = false;
+                    if (question.multiple) {
+                        isSelected = state.answers[section][index] && state.answers[section][index].includes(i);
+                    } else {
+                        isSelected = state.answers[section][index] === i;
+                    }
+                    
+                    const letter = String.fromCharCode(65 + i);
+                    html += `
+                        <div class="option-item ${isSelected ? 'selected' : ''}" data-option="${i}">
+                            <div class="option-letter">${letter}</div>
+                            <div class="option-text">${option}</div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            }
+            else if (question.type === 'synonyms') {
+                html += `<div class="options-grid two-columns">`;
+                question.options.forEach((option, i) => {
+                    const isSelected = state.answers[section][index] && state.answers[section][index].includes(i);
+                    const letter = String.fromCharCode(65 + i);
+                    html += `
+                        <div class="option-item ${isSelected ? 'selected' : ''}" data-option="${i}">
+                            <div class="option-letter">${letter}</div>
+                            <div class="option-text">${option}</div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            }
+            else if (question.type === 'select-sentence') {
+                // Selection is handled in the passage rendering
+                html += `<div class="instruction">Click on a sentence in the passage above to select it</div>`;
+            }
+            
+            // Add navigation buttons
+            html += `
+                <div class="controls">
+                    ${index > 0 ? 
+                        `<button class="btn btn-prev" onclick="navigateQuestion(-1)">Previous</button>` : 
+                        `<div></div>`
+                    }
+                    <button class="btn btn-next" id="next-btn" 
+                        ${isAnswerSelected(section, index) ? '' : 'disabled'}
+                        onclick="nextQuestion()">
+                        ${isLastQuestion() ? 'Finish Section' : 'Next'}
+                    </button>
+                </div>
+            `;
+            
+            html += `</div>`;
+            contentEl.innerHTML = html;
+            
+            // Add event listeners for options
+            if (question.type === 'single' || question.type === 'multiple' || question.type === 'synonyms') {
+                document.querySelectorAll('.option-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        handleOptionClick(item, question);
+                    });
+                });
+            }
+            else if (question.type === 'double' || question.type === 'triple') {
+                document.querySelectorAll('.option-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        handleBlankOptionClick(item, question);
+                    });
+                });
+            }
+            else if (question.type === 'select-sentence') {
+                document.querySelectorAll('.sentence').forEach(sentence => {
+                    sentence.addEventListener('click', () => {
+                        handleSentenceClick(sentence);
+                    });
+                });
+            }
+        }
+
+        // Check if an answer is selected for the current question
+        function isAnswerSelected(section, index) {
+            const answer = state.answers[section][index];
+            const question = questions[section][index];
+            
+            if (!answer) return false;
+            
+            if (question.type === 'multiple' && question.multiple) {
+                return answer.length > 0;
+            }
+            else if (question.type === 'synonyms') {
+                return answer.length > 0;
+            }
+            else if (question.type === 'select-sentence') {
+                return answer !== null;
+            }
+            
+            return true;
+        }
+
+        // Handle option selection
+        function handleOptionClick(item, question) {
+            const optionIndex = parseInt(item.dataset.option);
+            const section = state.currentSection;
+            const qIndex = state.currentQuestionIndex;
+            let currentAnswer = state.answers[section][qIndex];
+            
+            // Reset selection for single-answer questions
+            if (question.type === 'single' || (question.type === 'multiple' && !question.multiple)) {
+                document.querySelectorAll('.option-item').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                state.answers[section][qIndex] = optionIndex;
+            }
+            // Toggle selection for multiple-answer questions
+            else if (question.type === 'multiple' && question.multiple) {
+                if (!currentAnswer) currentAnswer = [];
+                
+                if (currentAnswer.includes(optionIndex)) {
+                    // Remove selection
+                    state.answers[section][qIndex] = currentAnswer.filter(i => i !== optionIndex);
+                } else {
+                    // Add selection
+                    state.answers[section][qIndex] = [...currentAnswer, optionIndex];
+                }
+            }
+            // Toggle selection for synonym questions (max 2 selections)
+            else if (question.type === 'synonyms') {
+                if (!currentAnswer) currentAnswer = [];
+                
+                if (currentAnswer.includes(optionIndex)) {
+                    // Remove selection
+                    state.answers[section][qIndex] = currentAnswer.filter(i => i !== optionIndex);
+                } else if (currentAnswer.length < 2) {
+                    // Add selection
+                    state.answers[section][qIndex] = [...currentAnswer, optionIndex];
+                } else {
+                    // Replace the first selection
+                    state.answers[section][qIndex] = [currentAnswer[1], optionIndex];
+                }
+            }
+            
+            // Update UI
+            renderQuestion();
+        }
+
+        // Handle blank option selection
+        function handleBlankOptionClick(item, question) {
+            const blankIndex = parseInt(item.dataset.blank);
+            const optionIndex = parseInt(item.dataset.option);
+            const section = state.currentSection;
+            const qIndex = state.currentQuestionIndex;
+            
+            // Initialize answer array if needed
+            if (!state.answers[section][qIndex]) {
+                state.answers[section][qIndex] = Array(question.blanks.length).fill(null);
+            }
+            
+            // Update the selected option for this blank
+            state.answers[section][qIndex][blankIndex] = optionIndex;
+            
+            // Update UI
+            renderQuestion();
+        }
+
+        // Handle sentence selection
+        function handleSentenceClick(sentence) {
+            const section = state.currentSection;
+            const qIndex = state.currentQuestionIndex;
+            const sentenceIndex = parseInt(sentence.dataset.index);
+            
+            state.answers[section][qIndex] = sentenceIndex;
+            state.selectedSentence = sentenceIndex;
+            
+            // Update UI
+            renderQuestion();
+        }
+
+        // Navigation functions
+        function navigateQuestion(direction) {
+            state.currentQuestionIndex += direction;
+            renderQuestion();
+        }
+
+        function nextQuestion() {
+            if (isLastQuestion()) {
+                finishSection();
+            } else {
+                state.currentQuestionIndex++;
+                renderQuestion();
+            }
+        }
+
+        function isLastQuestion() {
+            const section = state.currentSection;
+            const index = state.currentQuestionIndex;
+            return index === questions[section].length - 1;
+        }
+
+        // Finish current section and show summary
+        function finishSection() {
+            stopTimer();
+            const section = state.currentSection;
+            const sectionNumber = section === 'section2' ? 2 : 4;
+            const time = state.sectionTimes[section];
+            
+            // Format time
+            const hours = Math.floor(time / 3600);
+            const minutes = Math.floor((time % 3600) / 60);
+            const seconds = time % 60;
+            const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            let html = `
+                <div class="summary-container">
+                    <h2 class="summary-title">Section ${sectionNumber} Summary</h2>
+                    
+                    <div class="section-header">
+                        <span>Questions</span>
+                        <span>Time: ${formattedTime}</span>
+                    </div>
+            `;
+            
+            // Show all questions and answers
+            questions[section].forEach((question, index) => {
+                const answer = state.answers[section][index];
+                
+                html += `
+                    <div class="summary-item">
+                        <div class="question-summary">
+                            <strong>Question ${index + 1}:</strong> ${question.question}
+                        </div>
+                        <div class="answer-summary">
+                            ${formatAnswer(question, answer)}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Add navigation button
+            if (section === 'section2') {
+                html += `
+                    <button class="btn btn-next" style="margin-top: 30px; width: 100%;" 
+                            onclick="startSection4()">
+                        Continue to Section 4
+                    </button>
+                `;
+            } else {
+                html += `
+                    <div class="completion-message">
+                        <h2 class="completion-title">Test Completed!</h2>
+                        <p class="completion-text">You've finished both sections of the GRE practice test.</p>
+                        <p class="completion-text">Total time: <span class="highlight">${formattedTime}</span></p>
+                    </div>
+                `;
+            }
+            
+            html += `</div>`;
+            document.getElementById('content').innerHTML = html;
+        }
+
+        // Format answer for display in summary
+        function formatAnswer(question, answer) {
+            if (answer === null) return "No answer selected";
+            
+            if (question.type === 'single') {
+                return `Selected: ${String.fromCharCode(65 + answer)}`;
+            }
+            else if (question.type === 'double' || question.type === 'triple') {
+                return answer.map((ans, i) => 
+                    `${String.fromCharCode(65 + i)}: ${String.fromCharCode(65 + ans)}`
+                ).join(', ');
+            }
+            else if (question.type === 'multiple' && question.multiple) {
+                return `Selected: ${answer.map(a => String.fromCharCode(65 + a)).join(', ')}`;
+            }
+            else if (question.type === 'multiple' && !question.multiple) {
+                return `Selected: ${String.fromCharCode(65 + answer)}`;
+            }
+            else if (question.type === 'synonyms') {
+                return `Selected: ${answer.map(a => String.fromCharCode(65 + a)).join(', ')}`;
+            }
+            else if (question.type === 'select-sentence') {
+                return `Selected sentence ${answer + 1}`;
+            }
+            
+            return "Answered";
+        }
+
+        // Start Section 4
+        function startSection4() {
+            state.currentSection = 'section4';
+            state.currentQuestionIndex = 0;
+            startTimer();
+            renderQuestion();
+        }
+
+        // Prevent text selection
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        
+        // Make functions available in global scope
+        window.navigateQuestion = navigateQuestion;
+        window.nextQuestion = nextQuestion;
+        window.startSection4 = startSection4;
+    </script>
+</body>
+</html>
